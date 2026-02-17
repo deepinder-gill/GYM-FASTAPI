@@ -1,13 +1,13 @@
 from fastapi import APIRouter, HTTPException
-from app.models.user import usercreate, userout
+from app.models.user import UserCreate, UserOut
 from app.core.security import hash_password
 
 router = APIRouter()
 
 fake_user_db = []
 
-@router.post("/register", response_model=userout)
-def register(user: usercreate):
+@router.post("/register", response_model=UserOut)
+def register(user: UserCreate):
 
     for existing_user in fake_user_db:
         if existing_user['email'] == user.email:
