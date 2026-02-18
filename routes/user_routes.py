@@ -1,6 +1,9 @@
 from fastapi import APIRouter, HTTPException
 from app.Schemas.user import UserCreate, UserOut
 from app.core.security import hash_password, verify_password
+from sqlalchemy.orm import Session
+from app.database import get_db
+from app.models.models import User
 
 router = APIRouter()
 
