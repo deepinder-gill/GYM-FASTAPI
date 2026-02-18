@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
-from app.models.user import UserCreate, UserOut
-from app.core.security import hash_password
+from app.Schemas.user import UserCreate, UserOut
+from app.core.security import hash_password, verify_password
 
 router = APIRouter()
 
@@ -23,3 +23,15 @@ def register(user: UserCreate):
     fake_user_db.append(new_user)
 
     return {"email": user.email}
+
+@router.post("/login")
+def login(user: UserCreate):
+    for existing_user in fake_user_db:
+        if existing_user['email'] == user.email:
+
+            if verify_password(user.password, existing_user['hash_password']):
+                return {"message" : "Login Successful"}
+
+            break
+
+    raise HTTPException(status_code=400, detail="Invalid Credentials")
