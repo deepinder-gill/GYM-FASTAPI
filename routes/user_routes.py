@@ -31,7 +31,7 @@ def login(user: UserCreate, db: Session = Depends(get_db)):
     existing_user = db.query(User).filter(User.email == user.email).first()
 
 
-    if not existing_user is None:
+    if existing_user is None:
         raise HTTPException(status_code=400, detail="Invalid Credentials")
 
     if not verify_password(user.password, existing_user.hashed_password):
