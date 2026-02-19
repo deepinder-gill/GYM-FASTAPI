@@ -4,6 +4,8 @@ from app.core.security import hash_password, verify_password, create_access_toke
 from sqlalchemy.orm import Session
 from app.database import get_db
 from app.models.models import User
+from app.core.dependencies import get_current_user
+
 
 router = APIRouter()
 
@@ -37,11 +39,15 @@ def login(user: UserCreate, db: Session = Depends(get_db)):
     if not verify_password(user.password, existing_user.hashed_password):
         raise HTTPException(status_code=400, detail="Invalid Credentials")
 
+    access_token = create_access_token
     return {
-        "access_token": create_access_token,
+        "access_token": access_token,
         "token_type": "bearer"
     }
 
+@router.get("/me")
+def read_current_user(current_user: User = Depends(get_current_user)):
+    return {"email": current_user.email}
 
 
 
