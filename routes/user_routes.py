@@ -7,8 +7,6 @@ from app.models.models import User
 
 router = APIRouter()
 
-fake_user_db = []
-
 @router.post("/register", response_model=UserOut)
 def register(user: UserCreate, db: Session = Depends(get_db)):
 
