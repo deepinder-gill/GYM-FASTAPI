@@ -38,3 +38,8 @@ def login(user: UserCreate, db: Session = Depends(get_db)):
         raise HTTPException(status_code=400, detail="Invalid Credentials")
 
     return {"message": "Login Successful"}
+
+
+
+
+
