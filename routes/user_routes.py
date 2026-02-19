@@ -30,13 +30,13 @@ def register(user: UserCreate, db: Session = Depends(get_db)):
 
 @router.post("/login")
 def login(user: UserCreate, db: Session = Depends(get_db)):
-    existing_user = db.query(User).filter(User.email == user.email).first()
+    db_user = db.query(User).filter(User.email == user.email).first()
 
 
-    if existing_user is None:
+    if db_user is None:
         raise HTTPException(status_code=400, detail="Invalid Credentials")
 
-    if not verify_password(user.password, existing_user.hashed_password):
+    if not verify_password(user.password, db_user.hashed_password):
         raise HTTPException(status_code=400, detail="Invalid Credentials")
 
     access_token = create_access_token(data={"sub": db_user.email})
@@ -49,6 +49,7 @@ def login(user: UserCreate, db: Session = Depends(get_db)):
 @router.get("/me")
 def read_current_user(current_user: User = Depends(get_current_user)):
     return {"email": current_user.email}
+
 
 
 
