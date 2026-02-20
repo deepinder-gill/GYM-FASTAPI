@@ -58,28 +58,35 @@ def login(user: UserCreate, db: Session = Depends(get_db)):
 def read_current_user(current_user: User = Depends(get_current_user)):
     return {"email": current_user.email}
 @router.post("/refresh")
-def refresh_token(request: Request):
-
-    stored_token = db.query(RefreshToken).filter(
-        RefreshToken.token == token
-    ).first
-    if not stored_token:
-        raise HTTPException(status_code=400, detail="Invalid Refresh Token")
-
-    refresh_token = request.headers.get("Authorization")
-
-    if not refresh_token:
-        raise HTTPException(status_code=400, detail="Invalid Credentials")
-
-    token = refresh_token.replace("Bearer ", "")
+def refresh_token(refresh_token: str, db: Session = Depends(get_db)):
 
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         email = payload.get("sub")
 
+        stored_token = db.query(RefreshToken).filter(
+            RefreshToken.token == token
+        ).first
+        if not stored_token:
+            raise HTTPException(status_code=400, detail="Invalid Refresh Token")
+
         new_access_token = create_access_token(data={"sub": email})
+
 
         return {"access_token": new_access_token }
 
     except JWTError:
         raise HTTPException(status_code=400, detail="Invalid Refreshing Token")
+
+@router.post("/logout")
+def logout(token: str, db: Session = Depends(get_db)):
+
+    db_token = db.query(RefreshToken).filter(
+        RefreshToken.token == token
+    ).first()
+
+    if db_token:
+        db.delete(db_token)
+        db.commit()
+
+    return {"message": "You have been logged out"}
