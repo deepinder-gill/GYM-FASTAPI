@@ -3,7 +3,7 @@ from app.Schemas.user import UserCreate, UserOut
 from app.core.security import hash_password, verify_password, create_access_token, SECRET_KEY, ALGORITHM
 from sqlalchemy.orm import Session
 from app.database import get_db
-from app.models.models import User
+from app.models.models import User, RefreshToken
 from app.core.dependencies import get_current_user
 from jose import jwt, JWTError
 
@@ -40,6 +40,14 @@ def login(user: UserCreate, db: Session = Depends(get_db)):
         raise HTTPException(status_code=400, detail="Invalid Credentials")
 
     access_token = create_access_token(data={"sub": db_user.email})
+
+    db_refresh = RefreshToken(
+        token = access_token,
+        user_id = user.id
+    )
+
+    db.add(db_refresh)
+    db.commit()
 
     return {
         "access_token": access_token,
