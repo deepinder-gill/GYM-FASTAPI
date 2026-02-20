@@ -49,8 +49,3 @@ def login(user: UserCreate, db: Session = Depends(get_db)):
 @router.get("/me")
 def read_current_user(current_user: User = Depends(get_current_user)):
     return {"email": current_user.email}
-
-
-
-
-
