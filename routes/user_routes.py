@@ -60,7 +60,13 @@ def read_current_user(current_user: User = Depends(get_current_user)):
 @router.post("/refresh")
 def refresh_token(request: Request):
 
-    refresh_token = request.headers.get("Autharization")
+    stored_token = db.query(RefreshToken).filter(
+        RefreshToken.token == token
+    ).first
+    if not stored_token:
+        raise HTTPException(status_code=400, detail="Invalid Refresh Token")
+
+    refresh_token = request.headers.get("Authorization")
 
     if not refresh_token:
         raise HTTPException(status_code=400, detail="Invalid Credentials")
