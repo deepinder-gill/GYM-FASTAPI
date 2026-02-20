@@ -72,7 +72,6 @@ def refresh_token(refresh_token: str, db: Session = Depends(get_db)):
 
         new_access_token = create_access_token(data={"sub": email})
 
-
         return {"access_token": new_access_token }
 
     except JWTError:
