@@ -1,11 +1,11 @@
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, HTTPException, Depends, Request
 from app.Schemas.user import UserCreate, UserOut
-from app.core.security import hash_password, verify_password, create_access_token
+from app.core.security import hash_password, verify_password, create_access_token, SECRET_KEY, ALGORITHM
 from sqlalchemy.orm import Session
 from app.database import get_db
 from app.models.models import User
 from app.core.dependencies import get_current_user
-
+from jose import jwt, JWTError
 
 router = APIRouter()
 
@@ -49,3 +49,23 @@ def login(user: UserCreate, db: Session = Depends(get_db)):
 @router.get("/me")
 def read_current_user(current_user: User = Depends(get_current_user)):
     return {"email": current_user.email}
+@router.post("/refresh")
+def refresh_token(request: Request):
+
+    refresh_token = request.headers.get("Autharization")
+
+    if not refresh_token:
+        raise HTTPException(status_code=400, detail="Invalid Credentials")
+
+    token = refresh_token.replace("Bearer ", "")
+
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        email = payload.get("sub")
+
+        new_access_token = create_access_token(data={"sub": email})
+
+        return {"access_token": new_access_token }
+
+    except JWTError:
+        raise HTTPException(status_code=400, detail="Invalid Refreshing Token")
