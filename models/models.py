@@ -14,3 +14,4 @@ class RefreshToken(Base):
     id = Column(Integer, primary_key=True, index=True)
     token = Column(String, nullable=False)
     user_id = Column(Integer, ForeignKey("users.id"))
+
