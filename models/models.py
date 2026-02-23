@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Float
 from datetime import datetime
 
 from sqlalchemy.orm import relationship
@@ -26,6 +26,15 @@ class Workout_log(Base):
     users_id = Column(Integer, ForeignKey("users.id"))
     created_on = Column(DateTime, default=datetime.now)
     note = Column(String, nullable=True)
-    posts = relationship()
+    exercises = relationship("Workout_exercise", back_populates="owner")
 
-cl
+class Workout_exercise(Base):
+    __tablename__ = "Workout_Exercises"
+    id = Column(Integer, primary_key=True, index=True)
+    workout_id = Column(Integer, ForeignKey("workouts.id"))
+    exercise_name = Column(String)
+    sets = Column(Integer)
+    reps = Column(Integer)
+    weight = Column(Float)
+    owner = relationship("Workout_log", back_populates="exercises")
+
