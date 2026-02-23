@@ -1,9 +1,10 @@
 from fastapi import APIRouter, HTTPException, Depends, Request
 from app.Schemas.user import UserCreate, UserOut
+from app.Schemas.workout import WorkoutLogOut, WorkoutExerciseOut, WorkoutLogCreate
 from app.core.security import hash_password, verify_password, create_access_token, SECRET_KEY, ALGORITHM
 from sqlalchemy.orm import Session
 from app.database import get_db
-from app.models.models import User, RefreshToken
+from app.models.models import User, RefreshToken, WorkoutLog, WorkoutExercise
 from app.core.dependencies import get_current_user
 from jose import jwt, JWTError
 
