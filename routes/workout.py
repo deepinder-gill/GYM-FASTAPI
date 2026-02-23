@@ -21,7 +21,7 @@ def create_workout_log(
         note=log.note
     )
     db.add(new_workout_log)
-    db.commit()
+    db.flush()
     db.refresh(new_workout_log)
 
     for ex in log.exercises:
@@ -33,7 +33,7 @@ def create_workout_log(
             weight = ex.weight
         )
         db.add(new_ex)
-    db.flush()
+    db.commit()
     db.refresh(new_workout_log)
 
     return new_workout_log
