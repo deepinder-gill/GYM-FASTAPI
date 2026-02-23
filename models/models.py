@@ -23,15 +23,15 @@ class Workout_log(Base):
 
     __tablename__ = "workout_logs"
     id = Column(Integer, primary_key=True, index=True)
-    users_id = Column(Integer, ForeignKey("users.id"))
+    user_id = Column(Integer, ForeignKey("users.id"))
     created_on = Column(DateTime, default=datetime.now)
     note = Column(String, nullable=True)
-    exercises = relationship("Workout_exercise", back_populates="owner")
+    exercises = relationship("workout_exercise", back_populates="owner")
 
 class Workout_exercise(Base):
-    __tablename__ = "Workout_Exercises"
+    __tablename__ = "workout_exercises"
     id = Column(Integer, primary_key=True, index=True)
-    workout_id = Column(Integer, ForeignKey("workouts.id"))
+    workout_id = Column(Integer, ForeignKey("workouts_log.id"))
     exercise_name = Column(String)
     sets = Column(Integer)
     reps = Column(Integer)
