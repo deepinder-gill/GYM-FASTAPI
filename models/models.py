@@ -1,3 +1,5 @@
+from tkinter.constants import CASCADE
+
 from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Float
 from datetime import datetime, timezone
 
@@ -12,7 +14,7 @@ class User(Base):
     email = Column(String, unique=True, index=True)
     hashed_password = Column(String)
 
-    workout_logs = relationship("WorkoutLog", back_populates="user")
+    workout_logs = relationship("WorkoutLog", back_populates="user", CASCADE = "all, delete-orphan")
 
 class RefreshToken(Base):
     __tablename__ = "refresh_tokens"
@@ -29,7 +31,7 @@ class WorkoutLog(Base):
     created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
     note = Column(String, nullable=True)
 
-    exercises = relationship("WorkoutExercise", back_populates="workout")
+    exercises = relationship("WorkoutExercise", back_populates="workout", CASCADE = "all, delete-orphan")
     user = relationship("User", back_populates="workout_logs")
 
 class WorkoutExercise(Base):
@@ -37,9 +39,9 @@ class WorkoutExercise(Base):
     id = Column(Integer, primary_key=True, index=True)
     workout_id = Column(Integer, ForeignKey("workout_logs.id"))
     exercise_name = Column(String)
-    sets = Column(Integer)
-    reps = Column(Integer)
-    weight = Column(Float)
+    sets = Column(Integer, nullable=False)
+    reps = Column(Integer, nullable=False)
+    weight = Column(Float, nullable=False)
 
     workout = relationship("WorkoutLog", back_populates="exercises")
 
