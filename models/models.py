@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Float
-from datetime import datetime
+from datetime import datetime, timezone
 
 from sqlalchemy.orm import relationship
 
@@ -12,6 +12,8 @@ class User(Base):
     email = Column(String, unique=True, index=True)
     hashed_password = Column(String)
 
+    workout_logs = relationship("WorkoutLog", back_populates="user")
+
 class RefreshToken(Base):
     __tablename__ = "refresh_tokens"
 
@@ -19,22 +21,26 @@ class RefreshToken(Base):
     token = Column(String, nullable=False)
     user_id = Column(Integer, ForeignKey("users.id"))
 
-class Workout_log(Base):
+class WorkoutLog(Base):
 
     __tablename__ = "workout_logs"
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id"))
-    created_on = Column(DateTime, default=datetime.now)
+    created_on = Column(DateTime, default=lambda: datetime.now(timezone.utc))
     note = Column(String, nullable=True)
-    exercises = relationship("workout_exercise", back_populates="owner")
 
-class Workout_exercise(Base):
+    exercises = relationship("WorkoutExercise", back_populates="workout")
+    user = relationship("User", back_populates="workout_logs")
+
+class WorkoutExercise(Base):
     __tablename__ = "workout_exercises"
     id = Column(Integer, primary_key=True, index=True)
-    workout_id = Column(Integer, ForeignKey("workouts_log.id"))
+    workout_id = Column(Integer, ForeignKey("workout_logs.id"))
     exercise_name = Column(String)
     sets = Column(Integer)
     reps = Column(Integer)
     weight = Column(Float)
-    owner = relationship("Workout_log", back_populates="exercises")
+    
+    workout = relationship("WorkoutLog", back_populates="exercises")
+
 
