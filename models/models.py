@@ -26,7 +26,7 @@ class WorkoutLog(Base):
     __tablename__ = "workout_logs"
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id"))
-    created_on = Column(DateTime, default=lambda: datetime.now(timezone.utc))
+    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
     note = Column(String, nullable=True)
 
     exercises = relationship("WorkoutExercise", back_populates="workout")
