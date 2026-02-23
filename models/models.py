@@ -40,7 +40,7 @@ class WorkoutExercise(Base):
     sets = Column(Integer)
     reps = Column(Integer)
     weight = Column(Float)
-    
+
     workout = relationship("WorkoutLog", back_populates="exercises")
 
 
