@@ -44,7 +44,7 @@ def login(user: UserCreate, db: Session = Depends(get_db)):
 
     db_refresh = RefreshToken(
         token = access_token,
-        user_id = user.id
+        user_id = db_user.id
     )
 
     db.add(db_refresh)
