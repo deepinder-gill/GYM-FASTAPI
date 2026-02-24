@@ -1,8 +1,8 @@
 from fastapi import FastAPI
-from app.routes.user_routes import router
-from app.database import engine, Base
-from app.models.models import User
-from app.routes.workout_route import workoutrouter
+from routes.user_routes import router
+from database import engine, Base
+from models.models import User
+from routes.workout_route import workoutrouter
 
 Base.metadata.create_all(bind=engine)
 app = FastAPI()
