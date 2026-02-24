@@ -16,7 +16,7 @@ class WorkoutExerciseOut(BaseModel):
     weight : float
 
     class Config:
-        orm_mode =True
+        from_attributes = True
 
 class WorkoutLogCreate(BaseModel):
     note : Optional[str] = None
@@ -30,7 +30,7 @@ class WorkoutLogOut(BaseModel):
     exercises : List[WorkoutExerciseOut]
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 
