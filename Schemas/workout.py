@@ -33,6 +33,3 @@ class WorkoutLogOut(BaseModel):
         from_attributes = True
 
 
-
-
-
