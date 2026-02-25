@@ -6,4 +6,3 @@ class UserCreate(BaseModel):
 
 class UserOut(BaseModel):
     email: EmailStr
-
