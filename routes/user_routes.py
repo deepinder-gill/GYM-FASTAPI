@@ -91,4 +91,3 @@ def logout(token: str, db: Session = Depends(get_db)):
 
     return {"message": "You have been logged out"}
 
-
