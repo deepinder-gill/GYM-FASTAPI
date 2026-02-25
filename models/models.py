@@ -42,5 +42,3 @@ class WorkoutExercise(Base):
     weight = Column(Float, nullable=False)
 
     workout = relationship("WorkoutLog", back_populates="exercises")
-
-
