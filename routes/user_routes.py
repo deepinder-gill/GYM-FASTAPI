@@ -90,4 +90,3 @@ def logout(token: str, db: Session = Depends(get_db)):
         db.commit()
 
     return {"message": "You have been logged out"}
-
