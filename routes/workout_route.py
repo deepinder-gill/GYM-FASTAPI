@@ -114,3 +114,5 @@ def delete_workout_by_id(workout_id: int,
     db.commit()
 
     return  {"message": "Workout deleted successfully"}
+
+
