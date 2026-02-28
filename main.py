@@ -9,4 +9,3 @@ app = FastAPI()
 app.include_router(router)
 
 app.include_router(workoutrouter)
-
